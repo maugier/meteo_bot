@@ -1,0 +1,7 @@
+{"mattermost": {
+	"url": "https://mattermost.example.com",
+	"token": "BOT_ACCESS_TOKEN_HERE",
+	"channel": "CHANNEL_ID_HERE"
+        },
+ "sector": 0,
+ "interval": 600000}
