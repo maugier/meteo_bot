@@ -56,6 +56,7 @@ async function send_mattermost(payload) {
 }
 
 previous_level = {};
+current_level = {};
 
 function should_notify(a) {
 	notify = false;
@@ -63,6 +64,7 @@ function should_notify(a) {
 		notify = true;
 	}
 	previous_level[a.type] = a.severity;
+	current_level[a.type] = a.severity;
 	return notify;
 }
 
@@ -109,10 +111,16 @@ function render_alert(a) {
 function run() {
 	fetch_alerts().then(as => {
 		relevant_alerts = as.filter(a => a.regions.includes(config.sector));
+		current_level = {};
 		for (const a of relevant_alerts) {
 			if (should_notify(a)) {
 				console.log("Dispatching alert: " + JSON.stringify(a));
 				send_mattermost(render_alert(a));
+			}
+		}
+		for (const t in alert_icons) {
+			if (!(t in current_level)) {
+				previous_level[t] = 0;
 			}
 		}
 	})
